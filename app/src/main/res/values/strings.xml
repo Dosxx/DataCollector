@@ -32,6 +32,9 @@
     <string name="createDialog_message">Do you want to create another Reading?</string>
     <string name="exportButton">Export</string>
     <string name="displayHeader">Display Page</string>
-
+    <string name="STUDY_INPUT_REQUEST">Please enter a study ID and Name</string>
+    <string name="TASK_SELECTION_REQUEST">Please select a task to perform!</string>
+    <string name="FILE_NAME_REQUEST">Please provide a file name!</string>
+    <string name="FILE_NOT_FOUND">The file could not be found!</string>
 
 </resources>

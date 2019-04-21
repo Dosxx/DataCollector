@@ -20,10 +20,7 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     final String TAG = "MainActivity Log";
-    public static final String STUDY_INPUT_REQUEST = "Please enter a study ID and Name";
-    public static final String TASK_SELECTION_REQUEST = "Please select a task to perform!";
-    public static final String FILE_NAME_REQUEST = "Please provide a file name!";
-    public static final String FILE_NOT_FOUND = "The file could not be found!";
+
     /*contain the list of Study ID from stored program state*/
     String[] studyIDList = {"12345", "09876", "32145", "45555"};
     Context myContext;
@@ -39,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Button proceedButton;
     Button clearButton;
     ProgramState pState ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +93,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             startActivity(intent);
 
                         }else{
-                            Toast.makeText(myContext, FILE_NOT_FOUND,
+                            Toast.makeText(myContext, R.string.FILE_NOT_FOUND,
                                     Toast.LENGTH_LONG).show();
                             fileName.requestFocus();
                         }
 
                     }else{
-                        Toast.makeText(myContext, FILE_NAME_REQUEST,
+                        Toast.makeText(myContext, R.string.FILE_NAME_REQUEST,
                                 Toast.LENGTH_LONG).show();
                         fileName.requestFocus();
                     }
@@ -113,12 +111,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         intent = new Intent(myContext, CreateActivity.class);
                         startActivity(intent);
                     }else {
-                        Toast.makeText(myContext, STUDY_INPUT_REQUEST,
+                        Toast.makeText(myContext, R.string.STUDY_INPUT_REQUEST,
                                 Toast.LENGTH_LONG).show();
                         studyId.requestFocus();
                     }
                 }else{
-                    Toast.makeText(myContext, TASK_SELECTION_REQUEST,
+                    Toast.makeText(myContext, R.string.TASK_SELECTION_REQUEST,
                             Toast.LENGTH_LONG).show();
                     studyId.requestFocus();
                 }

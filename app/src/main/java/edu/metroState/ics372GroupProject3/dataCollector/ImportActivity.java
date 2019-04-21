@@ -11,8 +11,9 @@ public class ImportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import);
+
         ProgramState pState = (ProgramState)getApplication();
-        Readings myReadings =pState.getCurrentProgramReadings();
+        Readings myReadings = pState.getCurrentProgramReadings();
         Button uploadButton = findViewById(R.id.startButton);
 
 

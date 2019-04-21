@@ -2,12 +2,12 @@ package edu.metroState.ics372GroupProject3.dataCollector;
 
 import android.app.Application;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This class maintain the states of the current program execution:
  * the studies record, the current study, sites, and readings along
  * with imported file if one exist and readings from the imported file
- * 
  */
 public class ProgramState extends Application {
 	private Record currentProgramRecord;
@@ -18,9 +18,9 @@ public class ProgramState extends Application {
 	private Readings currentProgramReadings = null;
 	private boolean isRecordEmpty;
 	private XMLFile xmlfile;
-	private final String JSON = ".json";
-	private final String XML = ".xml";
+	private JSONFile jsonFile;
 	protected String inputFileName;
+	protected String outputFileName;
 	protected  String stateFileName;
 	
 	/**
@@ -28,6 +28,7 @@ public class ProgramState extends Application {
 	 */
 	public ProgramState(){
 	    xmlfile = new XMLFile();
+	    jsonFile = new JSONFile();
 	    currentProgramRecord = Record.getInstance();
 	    isRecordEmpty = currentProgramRecord.isEmpty();
     }
@@ -35,9 +36,10 @@ public class ProgramState extends Application {
 	public ProgramState(String stateFileName) throws Exception{
 		//return record from previous state if it exist
         this.stateFileName = stateFileName;
-		currentProgramRecord = JSONFile.loadState(stateFileName);
+//		currentProgramRecord = JSONFile.loadState(stateFileName);
 		isRecordEmpty = currentProgramRecord.isEmpty();
 		xmlfile = new XMLFile();
+		jsonFile = new JSONFile();
 	}
 	
 	/**
@@ -75,7 +77,7 @@ public class ProgramState extends Application {
 			String unit, 
 			String readingID, 
 			Double readingValue, 
-			Long readingDate) throws Exception {
+			Long readingDate) {
         try {
             if (currentProgramSite != null) {
                 currentProgramSite.setRecording(true);
@@ -100,12 +102,14 @@ public class ProgramState extends Application {
 	 *
 	 */
 	public void readFile(File readingFile)throws Exception {
+		final String JSON = ".json";
+		final String XML = ".xml";
 		String extension = getExtension(readingFile.getName());
 		if(extension.equals(JSON)) {
-			currentProgramReadings  = JSONFile.readJSON(readingFile);
+			currentProgramReadings  = jsonFile.read(readingFile);
 			currentProgramStudy.setSiteForReading(currentProgramReadings);
 		}else if(extension.equals(XML)) {
-			currentProgramReadings = xmlfile.readXMLFile(readingFile);
+			currentProgramReadings = xmlfile.read(readingFile);
 			if (currentProgramReadings != null) {
 				currentProgramStudy = xmlfile.getStudy();
 				currentProgramStudy.setSiteForReading(currentProgramReadings);
@@ -123,29 +127,23 @@ public class ProgramState extends Application {
 	/**
 	 * export the record to a file of the user's choice
 	 */
-	public void exportStudies(String outputFileName) throws Exception{
-		JSONFile.writeToFile(currentProgramRecord, outputFileName);
+	public void exportStudies(File outputFile) throws IOException {
+		jsonFile.writeToFile(currentProgramRecord, outputFile);
 	}
 
 	
-	/**
-	 *
-	 */
+
 	public Record getCurrentProgramRecord() {
 		return currentProgramRecord;
 	}
 
-	/**
-	 *
-	 */
-	public void setCurrentProgramRecord(String stateFileName)throws Exception {
-		this.currentProgramRecord = JSONFile.loadState(stateFileName);
+
+	public void setCurrentProgramRecord(File stateFile)throws Exception {
+		this.currentProgramRecord = jsonFile.loadState(stateFile);
         isRecordEmpty = currentProgramRecord.isEmpty();
 	}
 
-	/**
-	 *
-	 */
+
 	public Study getCurrentProgramStudy() {
 		return currentProgramStudy;
 	}
@@ -157,16 +155,12 @@ public class ProgramState extends Application {
 	    currentProgramStudy = activeStudy;
 	}
 
-	/**
-	 *
-	 */
+
 	public Site getCurrentProgramSite() {
 		return currentProgramSite;
 	}
 
-	/**
-	 *
-	 */
+
 	public void setCurrentProgramSite(String siteID) {
 		if (currentProgramStudy != null) {
 			if(currentProgramStudy.getSiteByID(siteID) != null) {
@@ -189,46 +183,57 @@ public class ProgramState extends Application {
 		}
 	}
 	
-	/**
-	 * end current site collection
-	 */
+
 	public void endCollectingReadings() {
 		if(currentProgramSite != null) {
 			currentProgramSite.setRecording(false);
 		}
 	}
 
-	/**
-	 *
-	 */
+
 	public Item getCurrentProgramItem() {
 		return currentProgramItem;
 	}
 
-	/**
-	 *
-	 */
+
 	public void setCurrentProgramItem(Item currentProgramItem) {
 		this.currentProgramItem = currentProgramItem;
 	}
 
-	/**
-	 * 
-	 * @return
-	 * currentProgramInputFile
-	 */
 	public File getCurrentProgramInputFile() {
 		return currentProgramInputFile;
 	}
 
-	/**
-	 *
-	 */
+
 	public void setCurrentProgramInputFile(File currentProgramInputFile) {
 		this.currentProgramInputFile = currentProgramInputFile;
 	}
 
 	public Readings getCurrentProgramReadings() {
 		return currentProgramReadings;
+	}
+
+	public String getStateFileName() {
+		return stateFileName;
+	}
+
+	public void setStateFileName(String stateFileName) {
+		this.stateFileName = stateFileName;
+	}
+
+	public String getOutputFileName() {
+		return outputFileName;
+	}
+
+	public void setOutputFileName(String outputFileName) {
+		this.outputFileName = outputFileName;
+	}
+
+	public String getInputFileName() {
+		return inputFileName;
+	}
+
+	public void setInputFileName(String inputFileName) {
+		this.inputFileName = inputFileName;
 	}
 }

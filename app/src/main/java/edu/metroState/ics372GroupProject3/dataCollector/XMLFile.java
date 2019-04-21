@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
  */
 
 public class XMLFile implements IReader{
-	private SAXParserFactory saxParserFactory = null;
+	private SAXParserFactory saxParserFactory;
 	private Study myStudy; //variable to hold the input study from XML
 	
 	public XMLFile() {
@@ -46,26 +46,26 @@ public class XMLFile implements IReader{
 		return readings;
 	}
 
-	public Readings readXMLFile(File file) {
-		Readings readings = new Readings();
-		try {
-			SAXParser saxParser = saxParserFactory.newSAXParser();
-			XMLSAXParserHandler handler = new XMLSAXParserHandler();
-			saxParser.parse(file, handler);
-			//Get Item List
-			myStudy = handler.getStudy();
-			readings.setReadings(handler.getItemList());
-			for(Item i: readings.getReadings()) {
-				//correction to date and unit in the imported readings
-				i.validateDate();
-				i.ValidateUnit();
-			}
-		}
-		catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
-		}
-		return readings;
-	}
+//	public Readings readXMLFile(File file) {
+//		Readings readings = new Readings();
+//		try {
+//			SAXParser saxParser = saxParserFactory.newSAXParser();
+//			XMLSAXParserHandler handler = new XMLSAXParserHandler();
+//			saxParser.parse(file, handler);
+//			//Get Item List
+//			myStudy = handler.getStudy();
+//			readings.setReadings(handler.getItemList());
+//			for(Item i: readings.getReadings()) {
+//				//correction to date and unit in the imported readings
+//				i.validateDate();
+//				i.ValidateUnit();
+//			}
+//		}
+//		catch (ParserConfigurationException | SAXException | IOException e) {
+//			e.printStackTrace();
+//		}
+//		return readings;
+//	}
 	
 	//This method return the study imported from the input file
 	public Study getStudy() {
